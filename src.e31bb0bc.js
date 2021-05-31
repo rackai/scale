@@ -7630,6 +7630,13 @@ var Cell = {
 var MainCell = {
   style: {
     fontWeight: 'bold'
+  },
+  graph: {
+    div: {
+      style: {
+        height: 5
+      }
+    }
   }
 };
 var Row = {
@@ -7644,6 +7651,16 @@ var Row = {
     style: {
       fontWeight: '300',
       opacity: 0.35
+    }
+  },
+  graph: {
+    div: {
+      style: {
+        height: 2,
+        background: '#087CFA',
+        width: 0,
+        borderRadius: 2
+      }
     }
   }
 };
@@ -7695,6 +7712,13 @@ function generateSequence(base, ratio) {
       em: em,
       decimal: {
         text: !maincell ? Math.round(value * 100) / 100 : null
+      },
+      graph: {
+        div: {
+          style: {
+            width: Math.round(value)
+          }
+        }
       }
     };
     generateSubSequence(-i, value, obj, base, ratio);
@@ -7713,6 +7737,13 @@ function generateSequence(base, ratio) {
       em: _em,
       decimal: {
         text: Math.round(_value * 100) / 100
+      },
+      graph: {
+        div: {
+          style: {
+            width: Math.round(_value)
+          }
+        }
       }
     };
     generateSubSequence(_i, _value, obj, base, ratio);
@@ -7725,8 +7756,8 @@ function generateSubSequence(id, val, obj, base, r) {
   var next = val * r;
   var smallRatio = (next - val) / r;
   var arr = [];
-  if (next - val > 1) arr = [val + smallRatio];
-  if (next - val > 4) arr = [next - smallRatio, val + smallRatio];
+  if (Math.round(next) - Math.round(val) > 1) arr = [val + smallRatio];
+  if (Math.round(next) - Math.round(val) > 4) arr = [next - smallRatio, val + smallRatio];
 
   for (var i = 0; i < arr.length; i++) {
     var value = arr[i];
@@ -7742,6 +7773,14 @@ function generateSubSequence(id, val, obj, base, r) {
       em: em,
       decimal: {
         text: Math.round(value * 100) / 100
+      },
+      graph: {
+        div: {
+          style: {
+            width: Math.round(value),
+            height: 1
+          }
+        }
       }
     };
   }
@@ -7887,7 +7926,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51097" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52440" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
