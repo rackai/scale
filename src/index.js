@@ -54,7 +54,8 @@ var dom = DOM.create({
       placeholder: 'Base',
       type: 'number',
       attr: {
-        value: (el, state) => state.base
+        value: (el, state) => state.base,
+        autofocus: true
       },
       on: {
         input: (ev, el, state) => state.update({ base: el.node.value })
