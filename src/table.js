@@ -15,6 +15,7 @@ const Row = {
   childProto: Cell,
 
   i: { style: { opacity: 0.35 } },
+  variable: { style: { fontWeight: '300', opacity: 0.35 } },
   decimal: { style: { fontWeight: '300', opacity: 0.35 } },
   graph: { div: { style: { height: 2, background: '#087CFA', width: 0, borderRadius: 2 } }}
 }
@@ -34,6 +35,7 @@ export default {
     tr: {
       proto: Row,
       i: '#',
+      var: 'variable',
       decimal: 'decimal',
       px: 'px',
       em: 'em',
@@ -55,6 +57,7 @@ function generateSequence (base, ratio) {
     obj['row' + value] = {
       proto: maincell ? MainCell : {},
       i: { text: !maincell ? -i : null },
+      variable: { text: !maincell ? `em['${-i}']` : null },
       decimal: { text: !maincell ? Math.round(value * 100) / 100 : null },
       value: Math.round(value),
       em: em + 'em',
@@ -68,6 +71,7 @@ function generateSequence (base, ratio) {
     const em = Math.round(value / base * 1000) / 1000
     obj['row' + value] = {
       i: { text: i },
+      variable: { text: `em['${i}']` },
       decimal: { text: Math.round(value * 100) / 100 },
       value: Math.round(value),
       em: em + 'em',
@@ -87,9 +91,11 @@ function generateSubSequence (id, val, obj, base, r) {
   for (let i = 0; i < arr.length; i++) {
     const value = arr[i]
     const em = Math.round(value / base * 1000) / 1000
+    const key = `${id < 0 ? '-' : ''}${id < 0 ? -(id + 1) : id}.${id < 0 ? -i + 2 : i + 1}`
     obj['row' + value] = {
       style: { opacity: 0.35 },
-      i: { text: `${id < 0 ? '-' : ''}${id < 0 ? -(id + 1) : id}.${id < 0 ? -i + 2 : i + 1}` },
+      i: { text: key },
+      variable: { text: `em['${key}']` },
       decimal: { text: Math.round(value * 100) / 100 },
       value: Math.round(value),
       em: em + 'em',
