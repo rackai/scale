@@ -7680,9 +7680,9 @@ var _default = {
     tr: {
       proto: Row,
       i: '#',
+      decimal: 'decimal',
       px: 'px',
-      em: 'em',
-      decimal: 'decimal'
+      em: 'em'
     }
   },
   on: {
@@ -7708,11 +7708,11 @@ function generateSequence(base, ratio) {
       i: {
         text: !maincell ? -i : null
       },
-      value: Math.round(value),
-      em: em,
       decimal: {
         text: !maincell ? Math.round(value * 100) / 100 : null
       },
+      value: Math.round(value),
+      em: em + 'em',
       graph: {
         div: {
           style: {
@@ -7733,11 +7733,11 @@ function generateSequence(base, ratio) {
       i: {
         text: _i
       },
-      value: Math.round(_value),
-      em: _em,
       decimal: {
         text: Math.round(_value * 100) / 100
       },
+      value: Math.round(_value),
+      em: _em + 'em',
       graph: {
         div: {
           style: {
@@ -7769,11 +7769,11 @@ function generateSubSequence(id, val, obj, base, r) {
       i: {
         text: "".concat(id < 0 ? '-' : '').concat(id < 0 ? -(id + 1) : id, ".").concat(id < 0 ? -i + 2 : i + 1)
       },
-      value: Math.round(value),
-      em: em,
       decimal: {
         text: Math.round(value * 100) / 100
       },
+      value: Math.round(value),
+      em: em + 'em',
       graph: {
         div: {
           style: {
@@ -7926,7 +7926,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52440" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53151" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
