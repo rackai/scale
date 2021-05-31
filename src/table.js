@@ -34,9 +34,9 @@ export default {
     tr: {
       proto: Row,
       i: '#',
+      decimal: 'decimal',
       px: 'px',
       em: 'em',
-      decimal: 'decimal'
     }
   },
 
@@ -55,9 +55,9 @@ function generateSequence (base, ratio) {
     obj['row' + value] = {
       proto: maincell ? MainCell : {},
       i: { text: !maincell ? -i : null },
-      value: Math.round(value),
-      em,
       decimal: { text: !maincell ? Math.round(value * 100) / 100 : null },
+      value: Math.round(value),
+      em: em + 'em',
       graph: { div: { style: { width: Math.round(value) } } }
     }
     generateSubSequence(-i, value, obj, base, ratio)
@@ -68,9 +68,9 @@ function generateSequence (base, ratio) {
     const em = Math.round(value / base * 1000) / 1000
     obj['row' + value] = {
       i: { text: i },
-      value: Math.round(value),
-      em,
       decimal: { text: Math.round(value * 100) / 100 },
+      value: Math.round(value),
+      em: em + 'em',
       graph: { div: { style: { width: Math.round(value) } } }
     }
     generateSubSequence(i, value, obj, base, ratio)
@@ -90,9 +90,9 @@ function generateSubSequence (id, val, obj, base, r) {
     obj['row' + value] = {
       style: { opacity: 0.35 },
       i: { text: `${id < 0 ? '-' : ''}${id < 0 ? -(id + 1) : id}.${id < 0 ? -i + 2 : i + 1}` },
-      value: Math.round(value),
-      em,
       decimal: { text: Math.round(value * 100) / 100 },
+      value: Math.round(value),
+      em: em + 'em',
       graph: { div: { style: { width: Math.round(value), height: 1 } } }
     }
   }
