@@ -7711,15 +7711,16 @@ function generateSequence(base, ratio) {
   for (var i = 6; i >= 0; i--) {
     var value = base / Math.pow(ratio, i);
     var em = Math.round(value / base * 1000) / 1000;
-    obj[value] = {
-      proto: MainCell,
+    var maincell = i === 0;
+    obj['row' + value] = {
+      proto: maincell ? MainCell : {},
       i: {
-        text: -i
+        text: !maincell ? -i : null
       },
       value: Math.round(value),
       em: em,
       decimal: {
-        text: Math.round(value * 100) / 100
+        text: !maincell ? Math.round(value * 100) / 100 : null
       }
     };
     generateSubSequence(-i, value, obj, base, ratio);
@@ -7730,8 +7731,7 @@ function generateSequence(base, ratio) {
 
     var _em = Math.round(_value / base * 1000) / 1000;
 
-    obj[_value] = {
-      proto: MainCell,
+    obj['row' + _value] = {
       i: {
         text: _i
       },
@@ -7757,12 +7757,12 @@ function generateSubSequence(id, val, obj, base, r) {
   for (var i = 0; i < arr.length; i++) {
     var value = arr[i];
     var em = Math.round(value / base * 1000) / 1000;
-    obj[value] = {
+    obj['row' + value] = {
       style: {
         opacity: 0.35
       },
       i: {
-        text: "".concat(id, ".").concat(i + 1)
+        text: "".concat(id < 0 ? '-' : '').concat(id < 0 ? -(id + 1) : id, ".").concat(id < 0 ? -i + 2 : i + 1)
       },
       value: Math.round(value),
       em: em,
@@ -7820,7 +7820,7 @@ var dom = _domql.default.create({
     ratio: 1.618,
     sequence: []
   },
-  h2: 'Sizing scale',
+  h2: '(em) Sizing scale',
   fields: {
     style: {
       display: 'flex',
@@ -7840,7 +7840,8 @@ var dom = _domql.default.create({
       attr: {
         value: function value(el, state) {
           return state.base;
-        }
+        },
+        autofocus: true
       },
       on: {
         input: function input(ev, el, state) {
@@ -7912,7 +7913,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53051" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59183" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
