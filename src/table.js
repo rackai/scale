@@ -14,7 +14,8 @@ const Row = {
   childProto: Cell,
 
   i: { style: { opacity: 0.35 } },
-  decimal: { style: { fontWeight: '300', opacity: 0.35 } }
+  decimal: { style: { fontWeight: '300', opacity: 0.35 } },
+  graph: { div: { style: { height: 2, background: '#087CFA', width: 0 } }}
 }
 
 export default {
@@ -55,7 +56,8 @@ function generateSequence (base, ratio) {
       i: { text: !maincell ? -i : null },
       value: Math.round(value),
       em,
-      decimal: { text: !maincell ? Math.round(value * 100) / 100 : null }
+      decimal: { text: !maincell ? Math.round(value * 100) / 100 : null },
+      graph: { div: { style: { width: Math.round(value) } } }
     }
     generateSubSequence(-i, value, obj, base, ratio)
   }
@@ -67,7 +69,8 @@ function generateSequence (base, ratio) {
       i: { text: i },
       value: Math.round(value),
       em,
-      decimal: { text: Math.round(value * 100) / 100 }
+      decimal: { text: Math.round(value * 100) / 100 },
+      graph: { div: { style: { width: Math.round(value) } } }
     }
     generateSubSequence(i, value, obj, base, ratio)
   }
@@ -78,8 +81,8 @@ function generateSubSequence (id, val, obj, base, r) {
   const next = val * r
   const smallRatio = (next - val) / r
   let arr = []
-  if (next - val > 1) arr = [val + smallRatio]
-  if (next - val > 4) arr = [next - smallRatio, val + smallRatio]
+  if (Math.round(next) - Math.round(val) > 1) arr = [val + smallRatio]
+  if (Math.round(next) - Math.round(val) > 4) arr = [next - smallRatio, val + smallRatio]
   for (let i = 0; i < arr.length; i++) {
     const value = arr[i]
     const em = Math.round(value / base * 1000) / 1000
@@ -88,7 +91,8 @@ function generateSubSequence (id, val, obj, base, r) {
       i: { text: `${id < 0 ? '-' : ''}${id < 0 ? -(id + 1) : id}.${id < 0 ? -i + 2 : i + 1}` },
       value: Math.round(value),
       em,
-      decimal: { text: Math.round(value * 100) / 100 }
+      decimal: { text: Math.round(value * 100) / 100 },
+      graph: { div: { style: { width: Math.round(value) } } }
     }
   }
 }
