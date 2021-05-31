@@ -46,7 +46,7 @@ export default {
 function generateSequence (base, ratio) {
   const obj = { tag: 'tbody', childProto: Row }
 
-  for (let i = 6; i > 0; i--) {
+  for (let i = 6; i >= 0; i--) {
     const value = base / Math.pow(ratio, i)
     const em = Math.round(value / base * 1000) / 1000
     obj[value] = {
