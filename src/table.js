@@ -5,7 +5,8 @@ const Cell = {
 }
 
 const MainCell = {
-  style: { fontWeight: 'bold' }
+  style: { fontWeight: 'bold' },
+  graph: { div: { style: { height: 5 } }}
 }
 
 const Row = {
@@ -15,7 +16,7 @@ const Row = {
 
   i: { style: { opacity: 0.35 } },
   decimal: { style: { fontWeight: '300', opacity: 0.35 } },
-  graph: { div: { style: { height: 2, background: '#087CFA', width: 0 } }}
+  graph: { div: { style: { height: 2, background: '#087CFA', width: 0, borderRadius: 2 } }}
 }
 
 export default {
@@ -92,7 +93,7 @@ function generateSubSequence (id, val, obj, base, r) {
       value: Math.round(value),
       em,
       decimal: { text: Math.round(value * 100) / 100 },
-      graph: { div: { style: { width: Math.round(value) } } }
+      graph: { div: { style: { width: Math.round(value), height: 1 } } }
     }
   }
 }
