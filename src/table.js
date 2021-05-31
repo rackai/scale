@@ -4,55 +4,91 @@ const Cell = {
   tag: 'td'
 }
 
+const MainCell = {
+  style: { fontWeight: 'bold' }
+}
+
 const Row = {
   tag: 'tr',
 
-  childProto: Cell
+  childProto: Cell,
+
+  i: { style: { opacity: 0.35 } },
+  decimal: { style: { fontWeight: '300', opacity: 0.35 } }
 }
 
 export default {
   style: {
     color: 'white',
-    margin: '6.5vh 0',
+    margin: '6.5vh -1.35em',
     thead: { opacity: '.35' },
     tr: {},
     td: {
-      padding: '.35em'
+      padding: '.65em 1.35em'
     }
   },
 
   thead: {
     tr: {
-      childProto: { tag: 'td' },
-      id: '#',
+      proto: Row,
+      i: '#',
       px: 'px',
-      em: 'em'
+      em: 'em',
+      decimal: 'decimal'
     }
   },
 
-  tbody: {
-    childProto: Row,
-
-    on: {
-      update: (el, state) => el.set(generateSequence(state.base, state.ratio))
-    }
-  },
+  on: {
+    update: (el, state) => el.set(generateSequence(state.base, state.ratio))
+  }
 }
 
 function generateSequence (base, ratio) {
-  const obj = {}
-  for (let i = 1; i < 6; i++) {
-    const em = Math.pow(ratio, 1/i)
-    const value = base * Math.pow(ratio, i)
+  const obj = { tag: 'tbody', childProto: Row }
+
+  for (let i = 6; i > 0; i--) {
+    const value = base / Math.pow(ratio, i)
+    const em = Math.round(value / base * 1000) / 1000
     obj[value] = {
-      id: i,
-      value,
-      em
+      proto: MainCell,
+      i: { text: -i },
+      value: Math.round(value),
+      em,
+      decimal: { text: Math.round(value * 100) / 100 }
     }
+    generateSubSequence(-i, value, obj, base, ratio)
+  }
+
+  for (let i = 1; i < 7; i++) {
+    const value = base * Math.pow(ratio, i)
+    const em = Math.round(value / base * 1000) / 1000
+    obj[value] = {
+      proto: MainCell,
+      i: { text: i },
+      value: Math.round(value),
+      em,
+      decimal: { text: Math.round(value * 100) / 100 }
+    }
+    generateSubSequence(i, value, obj, base, ratio)
   }
   return obj
 }
 
-function generateSubSequence (base, ratio) {
-
+function generateSubSequence (id, val, obj, base, r) {
+  const next = val * r
+  const smallRatio = (next - val) / r
+  let arr = []
+  if (next - val > 1) arr = [val + smallRatio]
+  if (next - val > 4) arr = [next - smallRatio, val + smallRatio]
+  for (let i = 0; i < arr.length; i++) {
+    const value = arr[i]
+    const em = Math.round(value / base * 1000) / 1000
+    obj[value] = {
+      style: { opacity: 0.35 },
+      i: { text: `${id}.${i + 1}` },
+      value: Math.round(value),
+      em,
+      decimal: { text: Math.round(value * 100) / 100 }
+    }
+  }
 }

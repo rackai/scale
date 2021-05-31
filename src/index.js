@@ -17,6 +17,11 @@ set('theme', {
   background: '#fff3'
 })
 
+const sequence = Object.keys(Sequence).map((key) => {
+  const value = Sequence[key]
+  return { value, text: value, key }
+})
+
 var dom = DOM.create({
   style,
 
@@ -52,7 +57,7 @@ var dom = DOM.create({
         value: (el, state) => state.base
       },
       on: {
-        change: (ev, el, state) => state.update({ base: el.node.value })
+        input: (ev, el, state) => state.update({ base: el.node.value })
       }
     },
     ratio: {
@@ -61,7 +66,14 @@ var dom = DOM.create({
         value: (el, state) => state.ratio
       },
 
-      ...Sequence,
+      childProto: {
+        attr: {
+          value: element => element.value,
+          selected: (element, state) => element.value === state.ratio
+        }
+      },
+
+      ...sequence,
 
       on: {
         change: (ev, el, state) => state.update({ ratio: el.node.value })
