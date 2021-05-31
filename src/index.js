@@ -35,7 +35,7 @@ var dom = DOM.create({
     sequence: []
   },
 
-  h2: 'Sizing scale',
+  h2: '(em) Sizing scale',
 
   fields: {
     style: {

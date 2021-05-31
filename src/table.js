@@ -49,7 +49,7 @@ function generateSequence (base, ratio) {
   for (let i = 6; i >= 0; i--) {
     const value = base / Math.pow(ratio, i)
     const em = Math.round(value / base * 1000) / 1000
-    obj[value] = {
+    obj['row' + value] = {
       proto: MainCell,
       i: { text: -i },
       value: Math.round(value),
@@ -62,7 +62,7 @@ function generateSequence (base, ratio) {
   for (let i = 1; i < 7; i++) {
     const value = base * Math.pow(ratio, i)
     const em = Math.round(value / base * 1000) / 1000
-    obj[value] = {
+    obj['row' + value] = {
       proto: MainCell,
       i: { text: i },
       value: Math.round(value),
@@ -83,7 +83,7 @@ function generateSubSequence (id, val, obj, base, r) {
   for (let i = 0; i < arr.length; i++) {
     const value = arr[i]
     const em = Math.round(value / base * 1000) / 1000
-    obj[value] = {
+    obj['row' + value] = {
       style: { opacity: 0.35 },
       i: { text: `${id}.${i + 1}` },
       value: Math.round(value),
