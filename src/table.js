@@ -1,5 +1,7 @@
 'use strict'
 
+import { SquareButton } from '@rackai/symbols'
+
 const Cell = {
   tag: 'td'
 }
@@ -14,10 +16,45 @@ const Row = {
 
   childProto: Cell,
 
+  // buttons: {
+  //   style: {
+  //     display: 'flex',
+  //     gap: '.2em',
+  //     paddingLeft: '0 !important'
+  //   },
+
+  //   childProto: {
+  //     proto: SquareButton,
+  //     style: {
+  //       padding: '.35em',
+  //       fontSize: '15px',
+  //       svg: {
+  //         opacity: '.15'
+  //       }
+  //     },
+  //     define: { active: (param, el, state) => state[el.key] === el.parent.parent.key },
+  //     class: { active: el => el.active ? { svg: { opacity: 1 }, color: '#087CFA' } : {} },
+  //     icon: el => el.key,
+  //     theme: 'button',
+  //     on: {
+  //       click: (ev, el, state) => {
+  //         if (el.active) state.update({ [el.key]: null })
+  //         else state.update({ [el.key]: el.parent.parent.key })
+  //       }
+  //     }
+  //   },
+
+  //   paddingLeft: {},
+  //   paddingTop: {},
+  //   paddingRight: {},
+  //   paddingBottom: {},
+  //   borderRadius: {}
+  // },
+
   i: { style: { opacity: 0.35 } },
   variable: { style: { fontWeight: '300', opacity: 0.35 } },
   decimal: { style: { fontWeight: '300', opacity: 0.35 } },
-  graph: { div: { style: { height: 2, background: '#087CFA', width: 0, borderRadius: 2 } }}
+  graph: { div: { style: { height: 2, background: '#087CFA', width: 0, borderRadius: 2 } }},
 }
 
 export default {
@@ -35,16 +72,32 @@ export default {
     tr: {
       proto: Row,
       i: '#',
-      var: 'variable',
       decimal: 'decimal',
       px: 'px',
       em: 'em',
+      buttons: null
     }
   },
 
   on: {
     update: (el, state) => el.set(generateSequence(state.base, state.ratio))
   }
+}
+
+const numeric = {
+  '-6': 'U',
+  '-5': 'V',
+  '-4': 'W',
+  '-3': 'X',
+  '-2': 'Y',
+  '-1': 'Z',
+  '0': 'A',
+  '1': 'B',
+  '2': 'C',
+  '3': 'D',
+  '4': 'E',
+  '5': 'F',
+  '6': 'G',
 }
 
 function generateSequence (base, ratio) {
@@ -56,11 +109,12 @@ function generateSequence (base, ratio) {
     const maincell = i === 0
     obj['row' + value] = {
       proto: maincell ? MainCell : {},
-      i: { text: !maincell ? -i : null },
-      variable: { text: !maincell ? `em['${-i}']` : null },
+      key: numeric[-i],
+      i: { text: numeric[-i] },
       decimal: { text: !maincell ? Math.round(value * 100) / 100 : null },
       value: Math.round(value),
       em: em + 'em',
+      // buttons: {},
       graph: { div: { style: { width: Math.round(value) } } }
     }
     generateSubSequence(-i, value, obj, base, ratio)
@@ -70,11 +124,12 @@ function generateSequence (base, ratio) {
     const value = base * Math.pow(ratio, i)
     const em = Math.round(value / base * 1000) / 1000
     obj['row' + value] = {
-      i: { text: i },
-      variable: { text: `em['${i}']` },
+      key: numeric[i],
+      i: { text: numeric[i] },
       decimal: { text: Math.round(value * 100) / 100 },
       value: Math.round(value),
       em: em + 'em',
+      // buttons: {},
       graph: { div: { style: { width: Math.round(value) } } }
     }
     generateSubSequence(i, value, obj, base, ratio)
@@ -91,14 +146,15 @@ function generateSubSequence (id, val, obj, base, r) {
   for (let i = 0; i < arr.length; i++) {
     const value = arr[i]
     const em = Math.round(value / base * 1000) / 1000
-    const key = `${id < 0 ? '-' : ''}${id < 0 ? -(id + 1) : id}.${id < 0 ? -i + 2 : i + 1}`
+    const key = `${numeric[id]}.${id < 0 ? -i + 2 : i + 1}`
     obj['row' + value] = {
+      key,
       style: { opacity: 0.35 },
       i: { text: key },
-      variable: { text: `em['${key}']` },
       decimal: { text: Math.round(value * 100) / 100 },
       value: Math.round(value),
       em: em + 'em',
+      // buttons: {},
       graph: { div: { style: { width: Math.round(value), height: 1 } } }
     }
   }

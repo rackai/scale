@@ -1,6 +1,7 @@
 'use strict'
 
 import './define'
+import './icon'
 import style from './style'
 
 import DOM from '@rackai/domql'
@@ -15,6 +16,10 @@ set('theme', {
   name: 'field',
   color: 'white',
   background: '#fff3'
+}, {
+  name: 'button',
+  color: 'white',
+  background: '#fff1'
 })
 
 const sequence = Object.keys(Sequence).map((key) => {
@@ -31,8 +36,7 @@ var dom = DOM.create({
 
   state: {
     base: 17,
-    ratio: 1.618,
-    sequence: []
+    ratio: 1.618
   },
 
   h2: '(em) Sizing scale',
@@ -68,6 +72,7 @@ var dom = DOM.create({
       },
 
       childProto: {
+        define: { value: param => param },
         attr: {
           value: element => element.value,
           selected: (element, state) => element.value === state.ratio
