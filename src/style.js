@@ -2,7 +2,7 @@
 
 export default {
   fontFamily: '"Helvetica", "Arial", --system-default',
-  padding: '7.5vh 7.5vw',
+  padding: '8.5vh 7.5vw',
   background: 'black',
   color: 'white',
   position: 'absolute',

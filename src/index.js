@@ -5,7 +5,7 @@ import './icon'
 import style from './style'
 
 import DOM from '@rackai/domql'
-import { Input, Select, Sequence, set, Shape } from '@rackai/symbols'
+import { IconText, Input, Link, Select, Sequence, set, Shape } from '@rackai/symbols'
 
 import table from './table'
 
@@ -27,6 +27,16 @@ const sequence = Object.keys(Sequence).map((key) => {
   return { value, text: value, key }
 })
 
+const symbolsMap = {
+  base: 'b',
+  scale: 's',
+  borderRadius: 'r',
+  paddingLeft: 'L',
+  paddingTop: 'T',
+  paddingRight: 'R',
+  paddingBottom: 'B'
+}
+
 var dom = DOM.create({
   style,
 
@@ -36,7 +46,22 @@ var dom = DOM.create({
 
   state: {
     base: 17,
-    ratio: 1.618
+    scale: 1.618
+  },
+
+  logo: {
+    proto: [Link, IconText],
+    icon: 'logo',
+    href: '/',
+    style: {
+      color: 'white',
+      height: 'auto',
+      position: 'fixed',
+      fontSize: '1.6em',
+      padding: '.8em',
+      top: 0,
+      left: 0
+    }
   },
 
   h2: '(em) Sizing scale',
@@ -65,31 +90,60 @@ var dom = DOM.create({
         input: (ev, el, state) => state.update({ base: el.node.value })
       }
     },
-    ratio: {
+    scale: {
       proto: Select,
       attr: {
-        value: (el, state) => state.ratio
+        value: (el, state) => state.scale
       },
 
       childProto: {
         define: { value: param => param },
         attr: {
           value: element => element.value,
-          selected: (element, state) => element.value === state.ratio
+          selected: (element, state) => element.value == state.scale
         }
       },
 
       ...sequence,
 
       on: {
-        change: (ev, el, state) => state.update({ ratio: el.node.value })
+        change: (ev, el, state) => state.update({ scale: el.node.value })
       }
     }
   },
 
   on: {
-    render: (el, state) => el.update({})
+    render: (el, state) => {
+      const path = window.location.pathname.slice(1)
+
+      if (!path) return el.update({})
+
+      const arr = path.split(',')
+      const obj = { fromPath: true }
+      arr.map(v => {
+        const k = v.slice(0, 1)
+        const key = findByValue(symbolsMap, k)
+        const val = v.slice(1)
+        obj[key] = val
+      })
+      state.update(obj)
+    },
+    stateChange: (el, s) => {
+      const state = s.parse()
+      const keys = Object.keys(state)
+      const arr = []
+      keys.map(v => {
+        const key = symbolsMap[v]
+        const val = state[v]
+        if (key && val) arr.push(key + val)
+      })
+      window.history.pushState(state, null, arr.join(','))
+    }
   },
 
   table
 })
+
+function findByValue(obj, searchKey) {
+  return Object.keys(obj).filter(key => obj[key] === searchKey)[0]
+}
