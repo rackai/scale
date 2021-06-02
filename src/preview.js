@@ -85,7 +85,7 @@ export default {
     },
     header: { text: 'Code' },
     pre: (el, state) => {
-      const { base, paddingLeft, paddingTop, paddingRight, paddingBottom, other } = state
+      const { base, paddingLeft, paddingTop, paddingRight, paddingBottom, borderRadius, other } = state
 
       var matrix = []
       if (paddingTop && paddingTop === paddingBottom) matrix.push(['paddingVertical', paddingTop])
@@ -98,6 +98,7 @@ export default {
         if (paddingLeft) matrix.push(['paddingLeft', paddingLeft])
         if (paddingRight) matrix.push(['paddingRight', paddingRight])
       }
+      if (borderRadius) matrix.push(['borderRadius', borderRadius])
       if (other) matrix.push(['gap', other])
 
 return `container: {
