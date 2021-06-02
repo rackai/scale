@@ -105,7 +105,7 @@ export default {
 
 return `container: {
   fontSize: ${base},
-  ${matrix.map(v => (v[1] = `size.${v[1]}.int`) && (v.join(': '))).join(',\n  ')}
+  ${matrix.map(v => (v[1] = `size.${v[1]}`) && (v.join(': '))).join(',\n  ')}
 }`
     }
   }
