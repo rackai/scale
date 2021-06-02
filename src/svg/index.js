@@ -6,6 +6,7 @@ import paddingLeft from './padding-left.svg'
 import paddingTop from './padding-top.svg'
 import paddingRight from './padding-right.svg'
 import paddingBottom from './padding-bottom.svg'
+import other from './other.svg'
 
 export {
   logo,
@@ -13,5 +14,6 @@ export {
   paddingLeft,
   paddingTop,
   paddingRight,
-  paddingBottom
+  paddingBottom,
+  other
 }

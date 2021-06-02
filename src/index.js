@@ -7,7 +7,9 @@ import style from './style'
 import DOM from '@rackai/domql'
 import { IconText, Input, Link, Select, Sequence, set, Shape } from '@rackai/symbols'
 
+import preview from './preview'
 import table from './table'
+import sequence from './sequence'
 
 set('theme', {
   name: 'document',
@@ -22,7 +24,7 @@ set('theme', {
   background: '#fff1'
 })
 
-const sequence = Object.keys(Sequence).map((key) => {
+const scales = Object.keys(Sequence).map((key) => {
   const value = Sequence[key]
   return { value, text: value, key }
 })
@@ -34,17 +36,20 @@ const symbolsMap = {
   paddingLeft: 'L',
   paddingTop: 'T',
   paddingRight: 'R',
-  paddingBottom: 'B'
+  paddingBottom: 'B',
+  other: 'o'
 }
 
 var dom = DOM.create({
   style,
+  key: 'app',
 
   proto: Shape,
   theme: 'document',
   round: 0,
 
   state: {
+    fromPath: false,
     base: 17,
     scale: 1.618
   },
@@ -82,9 +87,13 @@ var dom = DOM.create({
       proto: Input,
       placeholder: 'Base',
       type: 'number',
+      class: {
+        disabled: { '&:disabled': { opacity: 0.7 } }
+      },
       attr: {
         value: (el, state) => state.base,
-        autofocus: true
+        autofocus: (el, state) => !state.fromPath,
+        disabled: (el,state) => state.fromPath
       },
       on: {
         input: (ev, el, state) => state.update({ base: el.node.value })
@@ -93,7 +102,8 @@ var dom = DOM.create({
     scale: {
       proto: Select,
       attr: {
-        value: (el, state) => state.scale
+        value: (el, state) => state.scale,
+        disabled: (el,state) => state.fromPath
       },
 
       childProto: {
@@ -104,13 +114,22 @@ var dom = DOM.create({
         }
       },
 
-      ...sequence,
+      ...scales,
 
       on: {
         change: (ev, el, state) => state.update({ scale: el.node.value })
       }
     }
   },
+
+  t: {
+    style: {
+      float: 'left',
+      maxWidth: 'calc(100% - 320px)',
+    },
+    table
+  },
+  preview,
 
   on: {
     render: (el, state) => {
@@ -139,9 +158,7 @@ var dom = DOM.create({
       })
       window.history.pushState(state, null, arr.join(','))
     }
-  },
-
-  table
+  }
 })
 
 function findByValue(obj, searchKey) {

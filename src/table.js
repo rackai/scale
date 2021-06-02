@@ -2,6 +2,8 @@
 
 import { SquareButton } from '@rackai/symbols'
 
+import sequence from './sequence'
+
 const Cell = {
   tag: 'td'
 }
@@ -45,7 +47,7 @@ const Row = {
       },
       on: {
         click: (ev, el, state) => {
-          if (el.active) state.update({ [el.key]: null })
+          if (el.active) delete state[el.key] && state.update()
           else state.update({ [el.key]: el.parent.parent.key })
         }
       }
@@ -55,7 +57,8 @@ const Row = {
     paddingTop: {},
     paddingRight: {},
     paddingBottom: {},
-    borderRadius: {}
+    borderRadius: {},
+    other: {}
   },
 
   i: { style: { opacity: 0.45 } },
@@ -87,7 +90,10 @@ export default {
   },
 
   on: {
-    update: (el, state) => el.set(generateSequence(state.base, state.scale))
+    update: (el, state) => {
+      el.set(generateSequence(state.base, state.scale))
+      el.lookup('app').preview.update()
+    }
   }
 }
 
@@ -109,12 +115,13 @@ const numeric = {
 
 function generateSequence (base, scale) {
   const obj = { tag: 'tbody', childProto: Row }
+  sequence.s = {}
 
   for (let i = 6; i >= 0; i--) {
     const value = base / Math.pow(scale, i)
     const em = Math.round(value / base * 1000) / 1000
     const maincell = i === 0
-    obj['row' + value] = {
+    obj[numeric[-i]] = {
       proto: maincell ? MainCell : {},
       key: numeric[-i],
       i: { text: numeric[-i] },
@@ -124,13 +131,14 @@ function generateSequence (base, scale) {
       buttons: {},
       graph: { div: { style: { width: Math.round(value) } } }
     }
+    sequence.s[numeric[-i]] = em
     generateSubSequence(-i, value, obj, base, scale)
   }
 
   for (let i = 1; i < 7; i++) {
     const value = base * Math.pow(scale, i)
     const em = Math.round(value / base * 1000) / 1000
-    obj['row' + value] = {
+    obj[numeric[i]] = {
       key: numeric[i],
       i: { text: numeric[i] },
       decimal: { text: Math.round(value * 100) / 100 },
@@ -139,6 +147,7 @@ function generateSequence (base, scale) {
       buttons: {},
       graph: { div: { style: { width: Math.round(value) } } }
     }
+    sequence.s[numeric[i]] = em
     generateSubSequence(i, value, obj, base, scale)
   }
   return obj
@@ -153,8 +162,8 @@ function generateSubSequence (id, val, obj, base, r) {
   for (let i = 0; i < arr.length; i++) {
     const value = arr[i]
     const em = Math.round(value / base * 1000) / 1000
-    const key = `${numeric[id]}.${id < 0 ? -i + 2 : i + 1}`
-    obj['row' + value] = {
+    const key = `${numeric[id]}${id < 0 ? -i + 2 : i + 1}`
+    obj[key] = {
       key,
       style: { td: { opacity: 0.25 } },
       i: { text: key },
@@ -164,5 +173,6 @@ function generateSubSequence (id, val, obj, base, r) {
       buttons: {},
       graph: { div: { style: { width: Math.round(value), height: 1 } } }
     }
+    sequence.s[key] = em
   }
 }
