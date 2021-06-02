@@ -162,7 +162,7 @@ function generateSubSequence (id, val, obj, base, r) {
   for (let i = 0; i < arr.length; i++) {
     const value = arr[i]
     const em = Math.round(value / base * 1000) / 1000
-    const key = `${numeric[id]}${id < 0 ? -i + 2 : i + 1}`
+    const key = `${numeric[id]}${i + 1}`
     obj[key] = {
       key,
       style: { td: { opacity: 0.25 } },

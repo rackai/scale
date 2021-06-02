@@ -104,7 +104,7 @@ export default {
       if (borderRadius) matrix.push(['borderRadius', borderRadius])
 
 return `container: {
-  fontSize: ${parseInt(base / 17 * 1000) / 1000}em,
+  fontSize: '${parseInt(base / 17 * 1000) / 1000}em',
   ${matrix.map(v => (v[1] = `size.${v[1]}`) && (v.join(': '))).join(',\n  ')}
 }`
     }
