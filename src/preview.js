@@ -88,18 +88,20 @@ export default {
       const { base, paddingLeft, paddingTop, paddingRight, paddingBottom, borderRadius, other } = state
 
       var matrix = []
-      if (paddingTop && paddingTop === paddingBottom) matrix.push(['paddingVertical', paddingTop])
+      if (paddingTop && paddingTop === paddingBottom && paddingTop === paddingLeft && paddingLeft === paddingRight) matrix.push(['padding', paddingTop])
       else {
-        if (paddingTop) matrix.push(['paddingTop', paddingTop])
-        if (paddingBottom) matrix.push(['paddingBottom', paddingBottom])
-      }
-      if (paddingLeft && paddingLeft === paddingRight) matrix.push(['paddingHorizontal', paddingLeft])
-      else {
-        if (paddingLeft) matrix.push(['paddingLeft', paddingLeft])
-        if (paddingRight) matrix.push(['paddingRight', paddingRight])
+        if (paddingTop && paddingTop === paddingBottom) matrix.push(['paddingVertical', paddingTop])
+        else {
+          if (paddingTop) matrix.push(['paddingTop', paddingTop])
+          if (paddingBottom) matrix.push(['paddingBottom', paddingBottom])
+        }
+        if (paddingLeft && paddingLeft === paddingRight) matrix.push(['paddingHorizontal', paddingLeft])
+        else {
+          if (paddingLeft) matrix.push(['paddingLeft', paddingLeft])
+          if (paddingRight) matrix.push(['paddingRight', paddingRight])
+        }
       }
       if (borderRadius) matrix.push(['borderRadius', borderRadius])
-      if (other) matrix.push(['gap', other])
 
 return `container: {
   fontSize: ${base},
