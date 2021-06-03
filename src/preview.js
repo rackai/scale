@@ -23,7 +23,7 @@ export default {
       width: '100%'
     },
     header: {
-      style: { opacity: '.5', fontWeight: 500, marginBottom: '.65em' },
+      style: { opacity: '.5', fontWeight: 500, marginBottom: '.65em' }
     }
   },
 
@@ -58,11 +58,11 @@ export default {
             fontSize: `${s.base}px`,
             lineHeight: 1,
             opacity: '1 !important',
-            borderRadius: (sequence.s[s['borderRadius']] || 0) + 'em',
-            borderTopWidth: (sequence.s[s['paddingTop']] || 0) + 'em',
-            borderLeftWidth: (sequence.s[s['paddingLeft']] || 0) + 'em',
-            borderBottomWidth: (sequence.s[s['paddingBottom']] || 0) + 'em',
-            borderRightWidth: (sequence.s[s['paddingRight']] || 0) + 'em',
+            borderRadius: (sequence.s[s.borderRadius] || 0) + 'em',
+            borderTopWidth: (sequence.s[s.paddingTop] || 0) + 'em',
+            borderLeftWidth: (sequence.s[s.paddingLeft] || 0) + 'em',
+            borderBottomWidth: (sequence.s[s.paddingBottom] || 0) + 'em',
+            borderRightWidth: (sequence.s[s.paddingRight] || 0) + 'em'
           }),
           text: (el, s) => `Base ${s.base}`
         }, { text: (el, s) => s.paddingRight || '', style: { gridArea: 'r' } }],
@@ -87,7 +87,7 @@ export default {
     pre: (el, state) => {
       const { base, paddingLeft, paddingTop, paddingRight, paddingBottom, borderRadius, ...other } = state.parse()
 
-      var matrix = []
+      const matrix = []
       if (paddingTop && paddingTop === paddingBottom && paddingTop === paddingLeft && paddingLeft === paddingRight) matrix.push(['padding', paddingTop])
       else {
         if (paddingTop && paddingTop === paddingBottom) matrix.push(['paddingVertical', paddingTop])
@@ -104,10 +104,11 @@ export default {
       if (borderRadius) matrix.push(['borderRadius', borderRadius])
 
       Object.keys(other).map(v => {
-        if (v.slice(0,1) === '.') matrix.push([v.slice(1), other[v]])
+        if (v.slice(0, 1) === '.') matrix.push([v.slice(1), other[v]])
+        return ''
       })
 
-return `container: {
+      return `container: {
   fontSize: '${parseInt(base / 17 * 1000) / 1000}em',
   ${matrix.map(v => (v[1] = `size.${v[1]}`) && (v.join(': '))).join(',\n  ')}
 }`

@@ -159,8 +159,8 @@ var dom = DOM.create({
         var val
         if (k === '.') {
           const param = v.slice(1).split('-')
-          key = '.' + param[0]
-          val = param[1]
+          key = '.' + unescape(param[0])
+          val = unescape(param[1])
         } else {
           key = findByValue(symbolsMap, k)
           val = v.slice(1)
