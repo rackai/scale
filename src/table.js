@@ -192,7 +192,8 @@ function generateSubSequence (id, val, obj, base, r) {
   const smallscale = (next - val) / r
   let arr = []
   if (Math.round(next) - Math.round(val) > 1) arr = [val + smallscale]
-  if (Math.round(next) - Math.round(val) > 4) arr = [next - smallscale, val + smallscale]
+  if (Math.round(next) - Math.round(val) > 2) arr = [next - smallscale, val + smallscale]
+  if (Math.round(next) - Math.round(val) > 100) arr = [next - smallscale, (next + val) / 2, val + smallscale]
   for (let i = 0; i < arr.length; i++) {
     const value = arr[i]
     const em = Math.round(value / base * 1000) / 1000
