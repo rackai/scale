@@ -37,7 +37,7 @@ const symbolsMap = {
   paddingTop: 'T',
   paddingRight: 'R',
   paddingBottom: 'B',
-  other: 'o'
+  other: '.'
 }
 
 var dom = DOM.create({
@@ -49,7 +49,7 @@ var dom = DOM.create({
   round: 0,
 
   state: {
-    fromPath: false,
+    lock: false,
     base: 17,
     scale: 1.618
   },
@@ -92,8 +92,8 @@ var dom = DOM.create({
       },
       attr: {
         value: (el, state) => state.base,
-        autofocus: (el, state) => !state.fromPath,
-        disabled: (el,state) => state.fromPath
+        autofocus: (el, state) => !state.lock,
+        disabled: (el,state) => state.lock
       },
       on: {
         input: (ev, el, state) => state.update({ base: el.node.value })
@@ -103,7 +103,7 @@ var dom = DOM.create({
       proto: Select,
       attr: {
         value: (el, state) => state.scale,
-        disabled: (el,state) => state.fromPath
+        disabled: (el,state) => state.lock
       },
 
       childProto: {
@@ -138,11 +138,19 @@ var dom = DOM.create({
       if (!path) return el.update({})
 
       const arr = path.split(',')
-      const obj = { fromPath: true }
+      const obj = { lock: true }
       arr.map(v => {
         const k = v.slice(0, 1)
-        const key = findByValue(symbolsMap, k)
-        const val = v.slice(1)
+        let key
+        var val
+        if (k === '.') {
+          const param = v.slice(1).split('-')
+          key = '.' + param[0]
+          val = param[1]
+        } else {
+          key = findByValue(symbolsMap, k)
+          val = v.slice(1)
+        }
         obj[key] = val
       })
       state.update(obj)
@@ -152,8 +160,14 @@ var dom = DOM.create({
       const keys = Object.keys(state)
       const arr = []
       keys.map(v => {
-        const key = symbolsMap[v]
-        const val = state[v]
+        const k = v.slice(0, 1)
+        let key
+        if (k === '.') {
+          key = v + '-'
+        } else {
+          key = symbolsMap[v]
+        }
+        var val = state[v]
         if (key && val) arr.push(key + val)
       })
       window.history.pushState(state, null, arr.join(','))

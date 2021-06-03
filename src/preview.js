@@ -85,7 +85,7 @@ export default {
     },
     header: { text: 'Code' },
     pre: (el, state) => {
-      const { base, paddingLeft, paddingTop, paddingRight, paddingBottom, borderRadius, other } = state
+      const { base, paddingLeft, paddingTop, paddingRight, paddingBottom, borderRadius, ...other } = state.parse()
 
       var matrix = []
       if (paddingTop && paddingTop === paddingBottom && paddingTop === paddingLeft && paddingLeft === paddingRight) matrix.push(['padding', paddingTop])
@@ -102,6 +102,10 @@ export default {
         }
       }
       if (borderRadius) matrix.push(['borderRadius', borderRadius])
+
+      Object.keys(other).map(v => {
+        if (v.slice(0,1) === '.') matrix.push([v.slice(1), other[v]])
+      })
 
 return `container: {
   fontSize: '${parseInt(base / 17 * 1000) / 1000}em',

@@ -29,7 +29,7 @@ const Row = {
 
     childProto: {
       proto: SquareButton,
-      if: (el, s) => !s.fromPath || (s[el.key] === el.parent.parent.key),
+      if: (el, s) => !s.lock || (s[el.key] === el.parent.parent.key),
       style: {
         padding: '.35em',
         fontSize: '15px',
@@ -37,13 +37,19 @@ const Row = {
       },
       define: { active: (param, el, state) => state[el.key] === el.parent.parent.key },
       class: {
-        active: (el, s) => s[el.key] === el.parent.parent.key ? { svg: { opacity: s.fromPath ? '.5 !important' : '1' }, color: '#087CFA !important' } : {},
+        active: (el, s) => {
+          const active = s[el.key] === el.parent.parent.key
+          const activeStyle = {
+            svg: { opacity: s.lock ? '.5 !important' : '1' }, color: '#087CFA !important'
+          }
+          return active ? activeStyle : {}
+        }
       },
       icon: el => el.key,
       theme: 'button',
       attr: {
         title: el => el.key,
-        disabled: (el, s) => s.fromPath
+        disabled: (el, s) => s.lock
       },
       on: {
         click: (ev, el, state) => {
@@ -58,7 +64,34 @@ const Row = {
     paddingRight: {},
     paddingBottom: {},
     borderRadius: {},
-    other: {}
+    other: {
+      if: (el, s) => !s.lock || (findByValue(s.parse(), el.parent.parent.key)),
+      define: { what: param => param },
+      class: {
+        active: (el, s) => {
+          const active = el.what
+          const activeStyle = {
+            svg: { opacity: s.lock ? '.5 !important' : '1' }, color: '#087CFA !important'
+          }
+          return active ? activeStyle : {}
+        }
+      },
+      what: (el, s) => {
+        const st = s.parse()
+        const anythingFound = findByValue(st, el.parent.parent.key)
+        return anythingFound && anythingFound.slice(1)
+      },
+      attr: {
+        title: (el, s) => el.what
+      },
+      on: {
+        click: (ev, el, state) => {
+          const prompt = window.prompt()
+          el.what = prompt
+          state.update({ ['.' + prompt]: el.parent.parent.key })
+        }
+      }
+    }
   },
 
   i: { style: { opacity: 0.45 } },
@@ -175,4 +208,8 @@ function generateSubSequence (id, val, obj, base, r) {
     }
     sequence.s[key] = em
   }
+}
+
+function findByValue(obj, searchKey) {
+  return Object.keys(obj).filter(key => obj[key] === searchKey)[0]
 }
