@@ -5,7 +5,7 @@ import './icon'
 import style from './style'
 
 import DOM from '@rackai/domql'
-import { IconText, Input, Link, Select, Sequence, set, Shape } from '@rackai/symbols'
+import { IconText, Input, Link, Select, Sequence, set, Shape, SquareButton } from '@rackai/symbols'
 
 import preview from './preview'
 import table from './table'
@@ -118,6 +118,20 @@ var dom = DOM.create({
 
       on: {
         change: (ev, el, state) => state.update({ scale: el.node.value })
+      }
+    },
+
+    unlock: {
+      proto: SquareButton,
+      style: {
+        color: 'white',
+        padding: '.55em',
+        fontSize: '15px',
+      },
+      class: { hide: (el, s) => s.lock ? {} : { display: 'none !important' } },
+      icon: 'unlock',
+      on: {
+        click: (ev, el, s) => s.update({ lock: !s.lock })
       }
     }
   },

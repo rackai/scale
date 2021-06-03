@@ -10,7 +10,7 @@ const Cell = {
 
 const MainCell = {
   style: { fontWeight: 'bold' },
-  graph: { div: { style: { height: 5 } }}
+  graph: { div: { style: { height: 5 } } }
 }
 
 const Row = {
@@ -65,7 +65,7 @@ const Row = {
     paddingBottom: {},
     borderRadius: {},
     other: {
-      if: (el, s) => !s.lock || (findByValue(s.parse(), el.parent.parent.key)),
+      if: (el, s) => !s.lock || (findByValueAndKeyMathes(s.parse(), el.parent.parent.key)),
       define: { what: param => param },
       class: {
         active: (el, s) => {
@@ -78,7 +78,7 @@ const Row = {
       },
       what: (el, s) => {
         const st = s.parse()
-        const anythingFound = findByValue(st, el.parent.parent.key)
+        const anythingFound = findByValueAndKeyMathes(st, el.parent.parent.key)
         return anythingFound && anythingFound.slice(1)
       },
       attr: {
@@ -87,6 +87,7 @@ const Row = {
       on: {
         click: (ev, el, state) => {
           const prompt = window.prompt()
+          if (!prompt) return
           el.what = prompt
           state.update({ ['.' + prompt]: el.parent.parent.key })
         }
@@ -97,7 +98,7 @@ const Row = {
   i: { style: { opacity: 0.45 } },
   variable: { style: { fontWeight: '300', opacity: 0.35 } },
   decimal: { style: { fontWeight: '300', opacity: 0.35 } },
-  graph: { div: { style: { height: 2, background: '#087CFA', width: 0, borderRadius: 2 } }},
+  graph: { div: { style: { height: 2, background: '#087CFA', width: 0, borderRadius: 2 } } }
 }
 
 export default {
@@ -137,13 +138,13 @@ const numeric = {
   '-3': 'X',
   '-2': 'Y',
   '-1': 'Z',
-  '0': 'A',
-  '1': 'B',
-  '2': 'C',
-  '3': 'D',
-  '4': 'E',
-  '5': 'F',
-  '6': 'G',
+  0: 'A',
+  1: 'B',
+  2: 'C',
+  3: 'D',
+  4: 'E',
+  5: 'F',
+  6: 'G'
 }
 
 function generateSequence (base, scale) {
@@ -210,6 +211,6 @@ function generateSubSequence (id, val, obj, base, r) {
   }
 }
 
-function findByValue(obj, searchKey) {
-  return Object.keys(obj).filter(key => obj[key] === searchKey)[0]
+function findByValueAndKeyMathes (obj, searchKey) {
+  return Object.keys(obj).filter(key => (obj[key] === searchKey) && key.slice(0, 1) === '.')[0]
 }
