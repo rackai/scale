@@ -144,7 +144,10 @@ const numeric = {
   3: 'D',
   4: 'E',
   5: 'F',
-  6: 'G'
+  6: 'G',
+  7: 'H',
+  8: 'I',
+  9: 'J'
 }
 
 function generateSequence (base, scale) {
@@ -169,7 +172,7 @@ function generateSequence (base, scale) {
     generateSubSequence(-i, value, obj, base, scale)
   }
 
-  for (let i = 1; i < 7; i++) {
+  for (let i = 1; i < 10; i++) {
     const value = base * Math.pow(scale, i)
     const em = Math.round(value / base * 1000) / 1000
     obj[numeric[i]] = {

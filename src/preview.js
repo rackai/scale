@@ -12,7 +12,8 @@ export default {
     width: 320,
     boxSizing: 'border-box',
     display: Object.keys(state.parse()).length > 3 ? 'block' : 'none',
-    marginTop: '6.5vh'
+    marginTop: '6.5vh',
+    zIndex: 100
   }),
 
   childProto: {
@@ -20,6 +21,7 @@ export default {
       background: '#fff1',
       padding: '1.35em',
       marginBottom: '.2em',
+      backdropFilter: 'blur(15px)',
       width: '100%'
     },
     header: {

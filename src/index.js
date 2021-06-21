@@ -140,6 +140,8 @@ var dom = DOM.create({
     style: {
       float: 'left',
       maxWidth: 'calc(100% - 320px)',
+      position: 'relative',
+      zIndex: 99
     },
     table
   },
