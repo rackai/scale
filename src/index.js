@@ -197,7 +197,7 @@ var dom = DOM.create({
         var val = state[v]
         if (key && val) arr.push(key + val)
       })
-      window.history.pushState(state, null, arr.join(','))
+      window.history.pushState(state, null, '/' + arr.join(','))
     }
   }
 })
