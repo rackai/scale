@@ -5,7 +5,7 @@ import './icon'
 import style from './style'
 
 import DOM from '@rackai/domql'
-import { IconText, Input, Link, Select, Sequence, set, Shape, SquareButton } from '@rackai/symbols'
+import { IconText, Input, Link, Select, SEQUENCE, set, Shape, SquareButton } from '@rackai/symbols'
 
 import preview from './preview'
 import table from './table'
@@ -24,8 +24,8 @@ set('theme', {
   background: '#fff1'
 })
 
-const scales = Object.keys(Sequence).map((key) => {
-  const value = Sequence[key]
+const scales = Object.keys(SEQUENCE).map((key) => {
+  const value = SEQUENCE[key]
   return { value, text: value, key }
 })
 
@@ -45,8 +45,10 @@ var dom = DOM.create({
   key: 'app',
 
   proto: Shape,
-  theme: 'document',
-  round: 0,
+  props: {
+    theme: 'document',
+    round: 0,
+  },
 
   state: {
     lock: false,
@@ -56,8 +58,10 @@ var dom = DOM.create({
 
   logo: {
     proto: [Link, IconText],
-    icon: 'logo',
-    href: '/',
+    props: {
+      icon: 'logo',
+      href: '/',
+    },
     style: {
       color: 'white',
       height: 'auto',
@@ -77,7 +81,9 @@ var dom = DOM.create({
       gap: '1em'
     },
     childProto: {
-      theme: 'field',
+      props: {
+        theme: 'field'
+      },
       style: {
         border: '0',
         padding: '.35em .65em'
@@ -85,8 +91,11 @@ var dom = DOM.create({
     },
     base: {
       proto: Input,
-      placeholder: 'Base',
-      type: 'number',
+      props: {
+        placeholder: 'Base',
+        type: 'number',
+        theme: 'field'
+      },
       class: {
         disabled: { '&:disabled': { opacity: 0.7 } }
       },
@@ -129,7 +138,9 @@ var dom = DOM.create({
         fontSize: '15px',
       },
       class: { hide: (el, s) => s.lock ? {} : { display: 'none !important' } },
-      icon: 'unlock',
+      props: {
+        icon: 'unlock',
+      },
       on: {
         click: (ev, el, s) => s.update({ lock: !s.lock })
       }
@@ -171,7 +182,7 @@ var dom = DOM.create({
       })
       state.update(obj)
     },
-    stateChange: (el, s) => {
+    stateUpdated: (el, s) => {
       const state = s.parse()
       const keys = Object.keys(state)
       const arr = []

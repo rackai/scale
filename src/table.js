@@ -45,8 +45,10 @@ const Row = {
           return active ? activeStyle : {}
         }
       },
-      icon: el => el.key,
-      theme: 'button',
+      props: el => ({
+        icon: el.key,
+        theme: 'button'
+      }),
       attr: {
         title: el => el.key,
         disabled: (el, s) => s.lock
