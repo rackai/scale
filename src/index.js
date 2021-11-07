@@ -60,7 +60,8 @@ var dom = DOM.create({
     proto: [Link, IconText],
     props: {
       icon: 'logo',
-      href: '/',
+      href: 'https://symbols.app/',
+      target: '_blank'
     },
     style: {
       color: 'white',
