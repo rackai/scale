@@ -50,7 +50,7 @@ var dom = DOM.create({
 
   state: {
     lock: false,
-    base: 17,
+    base: 16,
     scale: 1.618
   },
 
